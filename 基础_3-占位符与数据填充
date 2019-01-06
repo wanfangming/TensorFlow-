@@ -1,0 +1,19 @@
+import tensorflow as tf     # 最常规导入TensorFlow包的方式
+import numpy as np
+
+x_data = np.random.randn(5, 10)
+w_data = np.random.randn(10, 1)
+
+with tf.Graph().as_default():
+    x = tf.placeholder(tf.float32, shape=(5, 10))
+    w = tf.placeholder(tf.float32, shape=(10, 1))
+    b = tf.fill((5, 1), -1.)
+    xw = tf.matmul(x, w)        # 矩阵相乘
+
+    xwb = xw + b
+    s = tf.reduce_max(xwb)      # 获取向量最大值
+    with tf.Session() as sess:
+        outs = sess.run(s, feed_dict={x: x_data, w: w_data})    # 将数据填充到占位符
+
+print('outs = {}'.format(outs))
+
