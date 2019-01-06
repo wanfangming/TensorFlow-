@@ -15,3 +15,10 @@ sess.close()                # 关闭会话
 print('outs = {}'.format(outsd))
 print('outs = {}'.format(outse))
 print('outs = {}'.format(outsf))
+
+with tf.Session() as sess:
+    fetches = [a, b, c, d, e, f]
+    outs = sess.run(fetches)        # 进行批量运算
+
+print('outs = {}'.format(outs))
+print(type(outs[0]))                # 输出为numpy类型，方便之后操作
