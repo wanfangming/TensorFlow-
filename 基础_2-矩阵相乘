@@ -1,0 +1,18 @@
+import tensorflow as tf     # 最常规导入TensorFlow包的方式
+
+A = tf.constant([[1, 2, 3], [4, 5, 6]])     # 接收一个矩阵
+B = tf.constant([1, 0, 1])
+
+print(A.get_shape())                        # 获取矩阵的维度
+print(B.get_shape())
+
+# 矩阵只有当左边矩阵的列数等于右边矩阵的行数时,它们才可以相乘,乘积矩阵的行数等于左边矩阵的行数,乘积矩阵的列数等于右边矩阵的列数
+B = tf.expand_dims(B, 1)    # 给矩阵B增加一个维度
+print(B.get_shape())
+
+C = tf.matmul(A, B)
+sess = tf.InteractiveSession()
+print('matmul result:\n{}'.format(A.eval()))
+print('matmul result:\n{}'.format(B.eval()))
+print('matmul result:\n{}'.format(C.eval()))
+sess.close()
