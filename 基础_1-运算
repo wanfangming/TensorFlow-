@@ -1,0 +1,17 @@
+import tensorflow as tf     # 最常规导入TensorFlow包的方式
+
+a = tf.constant(5)
+b = tf.constant(2)
+c = tf.constant(3)
+d = tf.multiply(a, b)       # 相乘    7
+e = tf.add(c, b)            # 相加    5
+f = tf.subtract(d, e)       # 相减    2
+
+sess = tf.Session()         # 启动图
+outsd = sess.run(d)
+outse = sess.run(e)
+outsf = sess.run(f)
+sess.close()                # 关闭会话
+print('outs = {}'.format(outsd))
+print('outs = {}'.format(outse))
+print('outs = {}'.format(outsf))
