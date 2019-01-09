@@ -1,0 +1,13 @@
+import tensorflow as tf
+
+a = tf.constant(2)
+b = tf.constant(3)
+x = tf.add(a, b)
+with tf.Session() as sess:
+    writer = tf.summary.FileWriter('./graphs2', sess.graph)
+    print(sess.run(x))
+
+writer.close()
+
+# 再在终端输入python test.py
+# tensorboard --logdir="./graphs2" --port 6006
