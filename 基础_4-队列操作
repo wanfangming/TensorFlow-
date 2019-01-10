@@ -1,0 +1,33 @@
+import tensorflow as tf
+
+# 创建一个先入先出队列，初始化队列插入0.1、0.2、0.3三个数字
+q = tf.FIFOQueue(3, 'float')
+init = q.enqueue_many(([0.1, 0.2, 0.3],))
+
+# 创建出队列、+1、入队列操作
+x = q.dequeue()
+y = x + 1
+q_inc = q.enqueue([y])
+
+# 创建会话执行操作
+with tf.Session() as sess:
+    sess.run(init)
+    quelen = sess.run(q.size())
+    for i in range(2):
+        sess.run(q_inc)
+
+    quelen = sess.run(q.size())
+    for i in range(quelen):
+        print(sess.run(q.dequeue()))
+
+# 创建一个随机队列，队列最大长度为10，出队后最小长度为2
+q = tf.RandomShuffleQueue(capacity=10, min_after_dequeue=2, dtypes='float')
+
+# 执行十次入队操作
+sess = tf.Session()
+for i in range(0, 10):
+    sess.run(q.enqueue(i))
+
+# 执行八次出队操作
+for i in range(0, 8):
+    print(sess.run(q.dequeue()))
