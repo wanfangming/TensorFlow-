@@ -137,13 +137,32 @@ def alex_net(x, weights, biases, dropout):
 pred = alex_net(x, weights, biases, keep_prob)
 
 # 定义损失函数和优化器
-cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=pred, logits=y))
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=pred, logits=y))
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # 评估函数
-correct_pred = tf.equal(tf.arg_max(pred, 1), tf.arg_max(y, 1))
+correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
 # 训练与评估模型
 # 初始化变量
 init = tf.global_variables_initializer()
+
+with tf.Session() as sess:
+    sess.run(init)
+    step = 1
+    # 开始训练，直到达到training_iters,即200000
+    while step * batch_size < training_iters:
+        batch_x, batch_y = mnist.train.next_batch(batch_size)
+        sess.run(optimizer, feed_dict={x: batch_x, y: batch_y, keep_prob: dropout})
+        if step % display_step == 0:
+            # 计算损失之和准确度， 输出
+            loss, acc = sess.run([cost, accuracy], feed_dict={x: batch_x, y: batch_y, keep_prob: 1.})
+            print("Iter " + str(step * batch_size) + ", Minibatch Loss= " + "{:.6f}".format(loss) +
+                  ", Training Accuracy= " + "{:.5f}".format(acc))
+            step += 1
+            print("Optimization Finished!")
+            # 计算测试集的准确度
+            print("Testing Accuracy:", sess.run(accuracy, feed_dict={x: mnist.test.images[:256],
+                                                                     y: mnist.test.labels[:256],
+                                                                     keep_prob: 1.}))
